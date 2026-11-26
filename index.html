@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ALP Secret Santa 2026</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600&family=Questrial&family=JetBrains+Mono:wght@500;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Questrial&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
 /* Layout: one centred card on a pine ground; the draw reveals as a folded slip opening. */
 :root{
   --bg:#EEF1F5; --surface:#FFFFFF; --ink:#111418; --muted:#5B6470; --line:#D3D9E1;
   --pine:#0E2A52; --pine-ink:#FFFFFF; --berry:#B3203A; --gold:#B8862A; --slip:#FBF8F0;
   --display:"Century Gothic","CenturyGothic","Questrial",ui-sans-serif,system-ui,sans-serif;
-  --body:"EB Garamond",Garamond,"Times New Roman",serif;
+  --body:"Aptos","Aptos Display","Inter","Segoe UI",ui-sans-serif,system-ui,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
@@ -22,7 +22,7 @@
   --pine:#2D5A9B; --pine-ink:#FFFFFF; --berry:#E4566C; --gold:#D9AA4E; --slip:#1A212C; color-scheme:dark}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;padding-block:0 56px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;padding-block:0 56px}
 .wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 #draw{max-width:none;padding:0;gap:0}
 #draw>.inner{max-width:592px;width:100%;margin:-36px auto 0;display:flex;flex-direction:column;gap:20px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));position:relative;z-index:2}
@@ -57,7 +57,12 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-o
 .hero .eyebrow{color:#E8C170;font-family:var(--display)}
 .hero h1{color:#FFFFFF;font-size:clamp(38px,10vw,60px)}
 .hero h1 .star{color:#E8C170;display:inline-block;transform:translateY(-.1em)}
-.tagline{font-family:var(--body);font-style:italic;font-weight:500;font-size:clamp(18px,4.6vw,22px);color:#F4E3B8;margin:2px 0 0;font-size:clamp(20px,5vw,25px);text-wrap:balance}
+.tagline{font-family:var(--body);font-style:italic;font-weight:500;font-size:clamp(18px,4.6vw,22px);color:#F4E3B8;margin:2px 0 0;font-size:clamp(18px,4.6vw,22px);text-wrap:balance}
+.when{display:inline-flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 10px;margin:6px 0 4px;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.09);border:1px solid rgba(232,193,112,.45);font-family:var(--display);font-size:14px}
+.when span{color:#E8C170;text-transform:uppercase;letter-spacing:.1em;font-size:11px}
+.when b{color:#FFFFFF;font-weight:600}
+.when em{font-style:normal;color:rgba(225,233,244,.8);font-size:13px}
+.when em:empty{display:none}
 .hero .lede{color:rgba(225,233,244,.86);text-wrap:pretty}
 .festive-foot{text-align:center;color:var(--muted);font-size:14px;margin:8px 0 0}
 .festive-foot b{font-family:var(--display);color:var(--berry);font-size:18px;display:block}
@@ -97,6 +102,7 @@ h3{font-family:var(--display);font-weight:700;font-size:17px;margin:4px 0 0;colo
       <span class="eyebrow">ALP · Christmas 2026</span>
       <h1>Secret Santa <span class="star" aria-hidden="true">✦</span></h1>
       <p class="tagline">Gift wisely. Wrap nicely. Tell no one.</p>
+      <p class="when"><span>Gift exchange</span><b>Friday, 18 December 2026</b><em id="countdown"></em></p>
       <p class="lede">Somewhere in this office, a colleague is about to make your Christmas a little merrier. Enter your personal code to find out whose Christmas you get to brighten.</p>
     </div>
   </header>
@@ -123,6 +129,7 @@ h3{font-family:var(--display);font-weight:700;font-size:17px;margin:4px 0 0;colo
       <li>The minimum gift value is <b>₦7,000</b>. Gifts may exceed this amount at the giver's discretion.</li>
       <li>Each gift should include a personalised note to the recipient.</li>
       <li>Participants should keep the identity of their assigned recipient confidential until the reveal.</li>
+      <li>Gifts will be exchanged on <b>Friday, 18 December 2026</b>.</li>
     </ul>
     <h3>Prohibited gifts</h3>
     <ol class="rules ink">
@@ -227,6 +234,12 @@ $('q').addEventListener('input',render);
   let waiting=false;
   size(); draw(); addEventListener('resize',()=>{size();draw();});
   if(!still){ requestAnimationFrame(step); setInterval(()=>{ if(waiting&&!document.getElementById('draw').hidden){waiting=false;requestAnimationFrame(step);} },500); }
+})();
+(function(){
+  const el=document.getElementById('countdown'); if(!el) return;
+  let y,m,d; try{ const p=new Intl.DateTimeFormat('en-CA',{timeZone:'Africa/Lagos',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date()).split('-'); y=+p[0];m=+p[1]-1;d=+p[2]; }catch(_){ const n=new Date(); y=n.getFullYear();m=n.getMonth();d=n.getDate(); }
+  const days=Math.round((Date.UTC(2026,11,18)-Date.UTC(y,m,d))/864e5);
+  el.textContent=days>1?days+' days to go':days===1?'Tomorrow!':days===0?'Today!':'';
 })();
 </script>
 
